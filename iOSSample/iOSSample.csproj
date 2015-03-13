@@ -89,6 +89,15 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="fastJSON">
+      <HintPath>lib\fastJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="ApiAiSDK">
+      <HintPath>lib\ApiAiSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="ApiAi.iOS">
+      <HintPath>lib\ApiAi.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
@@ -100,6 +109,9 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="lib\ApiAi.iOS.dll" />
+    <None Include="lib\ApiAiSDK.dll" />
+    <None Include="lib\fastJSON.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -110,4 +122,7 @@
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="lib\" />
+  </ItemGroup>
 </Project>
