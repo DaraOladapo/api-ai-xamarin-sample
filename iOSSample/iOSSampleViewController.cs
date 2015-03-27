@@ -85,6 +85,7 @@ namespace iOSSample
                 conf.AccessToken, lang);
 
             config.JsonProcessingWithoutDynamicCode = true;
+            config.DebugLog = true;
 
             if (aiService != null)
             {
@@ -125,7 +126,7 @@ namespace iOSSample
                         var jsonParams = new JSONParameters
                             { 
                                 UseExtensions = false,
-                                EnableAnonymousTypes = true,
+                                EnableAnonymousTypes = false,
                                 SerializeNullValues = false,
                                 WithoutDynamicMethodsGeneration = true
                             };
@@ -143,6 +144,8 @@ namespace iOSSample
 
         void AiService_OnError(AIServiceException e)
         {
+            Log.Debug("iOSSampleViewController", e.ToString());
+
             InvokeOnMainThread(() =>
                 {
                     resultTextView.Text = e.ToString();
@@ -162,6 +165,7 @@ namespace iOSSample
 
         void AiService_AudioLevelChanged(float level)
         {
+            Log.Debug("iOSSampleViewController", "AudioLevel " + level);
             InvokeOnMainThread(() =>
                 soundLevelView.SetProgress(level, true));
         }
@@ -219,7 +223,6 @@ namespace iOSSample
             this.LanguageCode = languageCode;
             this.AccessToken = accessToken;
         }
-
 
         public override string ToString()
         {

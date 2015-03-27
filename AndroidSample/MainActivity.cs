@@ -191,7 +191,7 @@ namespace AndroidSample
 
         void AiService_AudioLevelChanged(float level)
         {
-            Log.Debug(TAG, "AiService_AudioLevelChanged");
+            Log.Debug(TAG, "AiService_AudioLevelChanged " + level);
             RunOnUiThread(() =>
                 {
                     float positiveLevel = Math.Abs(level);
