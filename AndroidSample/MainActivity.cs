@@ -30,7 +30,8 @@ using ApiAiSDK;
 using ApiAi.Common;
 using ApiAi.Android;
 using fastJSON;
-using Android.Util; 
+using Android.Util;
+using System.Threading.Tasks;
 
 namespace AndroidSample
 {
@@ -67,19 +68,19 @@ namespace AndroidSample
 
             languages = new []
             {
-                new LanguageConfig("en", "c7d7595293f64eda8da1620c81183d00"),
-                new LanguageConfig("ru", "adcb900f02594f4186420c082e44173e"),
-                new LanguageConfig("de", "96807aac0e98426eaf684f4081b7e431"),
-                new LanguageConfig("pt", "4c4a2277516041f6a1c909163ebfed39"),
-                new LanguageConfig("pt-BR", "6076377eea9e4291854204795b55eee9"),
-                new LanguageConfig("es", "430d461ea8e64c09a4459560353a5b1d"),
-                new LanguageConfig("fr", "d6434b3bf49d4a93a25679782619f39d"),
-                new LanguageConfig("it", "4319f7aa1765468194d9761432e4db36"),
-                new LanguageConfig("ja", "6cab6813dc8c416f92c3c2e2b4a7bc27"),
-                new LanguageConfig("ko", "b0219c024ee848eaa7cfb17dceb9934a"),
-                new LanguageConfig("zh-CN", "2b575c06deb246d2abe4bf769eb3200b"),
-                new LanguageConfig("zh-HK", "00ef32d3e35f43178405c046a16f3843"),
-                new LanguageConfig("zh-TW", "dd7ebc8a02974155aeffec26b21b55cf"),
+                    new LanguageConfig("en", "327bf2eb54904e508362f6fb528ce00a"),
+                    new LanguageConfig("ru", "adcb900f02594f4186420c082e44173e"),
+                    new LanguageConfig("de", "96807aac0e98426eaf684f4081b7e431"),
+                    new LanguageConfig("pt", "4c4a2277516041f6a1c909163ebfed39"),
+                    new LanguageConfig("pt-BR", "6076377eea9e4291854204795b55eee9"),
+                    new LanguageConfig("es", "430d461ea8e64c09a4459560353a5b1d"),
+                    new LanguageConfig("fr", "d6434b3bf49d4a93a25679782619f39d"),
+                    new LanguageConfig("it", "4319f7aa1765468194d9761432e4db36"),
+                    new LanguageConfig("ja", "6cab6813dc8c416f92c3c2e2b4a7bc27"),
+                    new LanguageConfig("ko", "b0219c024ee848eaa7cfb17dceb9934a"),
+                    new LanguageConfig("zh-CN", "2b575c06deb246d2abe4bf769eb3200b"),
+                    new LanguageConfig("zh-HK", "00ef32d3e35f43178405c046a16f3843"),
+                    new LanguageConfig("zh-TW", "dd7ebc8a02974155aeffec26b21b55cf"),
             };
             
             var languagesAdapter = new ArrayAdapter<LanguageConfig>(this, Android.Resource.Layout.SimpleSpinnerDropDownItem, languages);
@@ -91,26 +92,27 @@ namespace AndroidSample
             FindViewById<Button>(Resource.Id.buttonStopListen).Click += buttonStopListen_Click;
         }
 
-        void buttonListen_Click (object sender, EventArgs e)
+        void buttonListen_Click(object sender, EventArgs e)
         {
-            aiService.StartListening();
+            StartParallel(aiService.StartListening);
         }
 
-        void buttonStopListen_Click (object sender, EventArgs e)
+        void buttonStopListen_Click(object sender, EventArgs e)
         {
-            aiService.StopListening();
+            StartParallel(aiService.StopListening);
         }
 
-        void buttonCancel_Click (object sender, EventArgs e)
+        void buttonCancel_Click(object sender, EventArgs e)
         {
-            aiService.Cancel();
+            StartParallel(aiService.Cancel);
         }
 
         protected override void OnPause()
         {
+            Log.Debug(TAG, "OnPause");
             if (aiService != null)
             {
-                ((SpeaktoitRecognitionService)aiService).Pause();    
+                aiService.Pause();    
             }
 
             base.OnPause();
@@ -118,31 +120,31 @@ namespace AndroidSample
 
         protected override void OnResume()
         {
+            Log.Debug(TAG, "OnResume");
+
             base.OnResume();
 
             if (aiService != null)
             {
-                ((SpeaktoitRecognitionService)aiService).Resume();    
+                aiService.Resume();    
             }
-
         }
 
-        void SelectLanguageSpinner_ItemSelected (object sender, AdapterView.ItemSelectedEventArgs e)
+        void SelectLanguageSpinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             
             var selectedLanguage = languages[e.Position];
 
             var lang = SupportedLanguage.FromLanguageTag(selectedLanguage.LanguageCode);
             var config = new AIConfiguration("62f2522a-7404-4c28-b9ac-097ca5d8b32d",
-                selectedLanguage.AccessToken, lang);
-
-            config.DevMode = true;
-
-            if (aiService != null) {
+                             selectedLanguage.AccessToken, lang);
+            
+            if (aiService != null)
+            {
                 aiService.Cancel();
             }
 
-            aiService = new SpeaktoitRecognitionService(config);
+            aiService = new SpeaktoitRecognitionService(this, config);
 
             aiService.OnResult += AiService_OnResult;
             aiService.OnError += AiService_OnError;
@@ -151,14 +153,16 @@ namespace AndroidSample
             aiService.AudioLevelChanged += AiService_AudioLevelChanged;
         }
 
-        void AiService_OnResult (ApiAiSDK.Model.AIResponse response)
+        void AiService_OnResult(ApiAiSDK.Model.AIResponse response)
         {
             Log.Debug(TAG, "AiService_OnResult");
             RunOnUiThread(() =>
                 {
-                    if (!response.IsError) {
+                    if (!response.IsError)
+                    {
 
-                        var jsonParams = new JSONParameters { 
+                        var jsonParams = new JSONParameters
+                        { 
                             UseExtensions = false,
                             EnableAnonymousTypes = true,
                             SerializeNullValues = false,
@@ -167,7 +171,8 @@ namespace AndroidSample
                         var responseString = JSON.ToJSON(response, jsonParams);
                         resultTextView.Text = responseString;
                     }
-                    else {
+                    else
+                    {
                         resultTextView.Text = response.Status.ErrorDetails;
                     }
                 }
@@ -184,23 +189,24 @@ namespace AndroidSample
             );
         }
 
-        void AiService_AudioLevelChanged (float level)
+        void AiService_AudioLevelChanged(float level)
         {
             Log.Debug(TAG, "AiService_AudioLevelChanged");
             RunOnUiThread(() =>
                 {
                     float positiveLevel = Math.Abs(level);
-                    if (positiveLevel > 100) {
+                    if (positiveLevel > 100)
+                    {
                         positiveLevel = 100;
                     }
 
-                    progressBar.Progress = (int) positiveLevel;
+                    progressBar.Progress = (int)positiveLevel;
 
                 }
             );
         }
 
-        void AiService_ListeningFinished ()
+        void AiService_ListeningFinished()
         {
             Log.Debug(TAG, "AiService_ListeningFinished");
             RunOnUiThread(() =>
@@ -210,7 +216,7 @@ namespace AndroidSample
             );
         }
 
-        void AiService_ListeningStarted ()
+        void AiService_ListeningStarted()
         {
             Log.Debug(TAG, "AiService_ListeningStarted");
             RunOnUiThread(() =>
@@ -220,11 +226,17 @@ namespace AndroidSample
             );
         }
 
+        private void StartParallel(Action a)
+        {
+            new Task(a).Start();
+        }
+
     }
 
     class LanguageConfig
     {
         public string LanguageCode { get; set; }
+
         public string AccessToken { get; set; }
 
         public LanguageConfig(string languageCode, string accessToken)
