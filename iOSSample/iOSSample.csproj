@@ -22,6 +22,11 @@
     <MtouchArch>i386</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer: Danil Skachkov (EU95P2T795)</CodesignKey>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchI18n>
+    </MtouchI18n>
+    <CodesignProvision>6b6e48ec-85e5-48c9-aef5-4c31983b2f5d</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>full</DebugType>
@@ -44,8 +49,14 @@
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Danil Skachkov (EU95P2T795)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <IpaPackageName>
+    </IpaPackageName>
+    <MtouchI18n>
+    </MtouchI18n>
+    <CodesignProvision>6b6e48ec-85e5-48c9-aef5-4c31983b2f5d</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>full</DebugType>
@@ -56,7 +67,8 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Danil Skachkov (EU95P2T795)</CodesignKey>
+    <CodesignProvision>6b6e48ec-85e5-48c9-aef5-4c31983b2f5d</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>full</DebugType>
@@ -67,10 +79,14 @@
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <IpaIncludeArtwork>true</IpaIncludeArtwork>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
+    <CodesignKey>iPhone Developer: Danil Skachkov (EU95P2T795)</CodesignKey>
+    <CodesignProvision>6b6e48ec-85e5-48c9-aef5-4c31983b2f5d</CodesignProvision>
     <BuildIpa>true</BuildIpa>
+    <IpaPackageName>ai.api.xamarin.sample</IpaPackageName>
+    <IpaMetadata>Info.plist</IpaMetadata>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchI18n>
+    </MtouchI18n>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>full</DebugType>
@@ -81,22 +97,22 @@
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>Automatic:AppStore</CodesignProvision>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignProvision>6b6e48ec-85e5-48c9-aef5-4c31983b2f5d</CodesignProvision>
+    <CodesignKey>iPhone Developer: Danil Skachkov (EU95P2T795)</CodesignKey>
+    <IpaPackageName>
+    </IpaPackageName>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="Xamarin.iOS" />
-    <Reference Include="fastJSON">
-      <HintPath>lib\fastJSON.dll</HintPath>
-    </Reference>
     <Reference Include="ApiAiSDK">
       <HintPath>lib\ApiAiSDK.dll</HintPath>
     </Reference>
     <Reference Include="ApiAi.iOS">
       <HintPath>lib\ApiAi.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="Xamarin.iOS" />
+    <Reference Include="fastJSON">
+      <HintPath>lib\fastJSON.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

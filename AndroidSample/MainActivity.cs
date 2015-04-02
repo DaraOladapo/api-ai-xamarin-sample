@@ -181,7 +181,7 @@ namespace AndroidSample
 
         void AiService_OnError(AIServiceException exception)
         {
-            Log.Debug(TAG, "AiService_OnError", exception);
+            Log.Debug(TAG, "AiService_OnError", exception.ToString());
             RunOnUiThread(() =>
                 {
                     resultTextView.Text = exception.ToString();
